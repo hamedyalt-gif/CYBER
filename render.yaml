@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: cyber-shared-api
+    runtime: python
+    plan: starter
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    disk:
+      name: cyber-account-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: CYBER_AUTH_SECRET
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-6-luna
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: OPENAI_TIMEOUT_SECONDS
+        value: "90"
+      - key: CYBER_DATABASE_PATH
+        value: /var/data/cyber.sqlite3
+      - key: CYBER_AI_DAILY_LIMIT
+        value: "20"
+      - key: CYBER_AI_GLOBAL_DAILY_LIMIT
+        value: "200"
+      - key: CYBER_AI_MAX_OUTPUT_TOKENS
+        value: "900"
